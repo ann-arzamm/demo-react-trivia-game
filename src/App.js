@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import Question from './components/Question';
-import CategorySelector from './components/CategorySelector';
-import ResultModal from './components/ResultModal';
-import Scoreboard from './components/Scoreboard';
-import './App.css';
+import React, { useEffect, useState, useCallback } from "react";
+import Question from "./components/Question";
+import CategorySelector from "./components/CategorySelector";
+import ResultModal from "./components/ResultModal";
+import Scoreboard from "./components/Scoreboard";
+import "./App.css";
 
 export default function App() {
-
   const [question, setQuestion] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("any");
+
+  const getQuestion = useCallback(() => {
+    let url = "https://opentdb.com/api.php?amount=1";
+    if (selectedCategory !== "any") url += `&category=${selectedCategory}`;
+
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setQuestion(data.results[0]));
+  }, [selectedCategory]);
 
   useEffect(() => {
     getQuestion();
-  }, [])
-
-  function getQuestion() {
-    const url = 'https://opentdb.com/api.php?amount=1';
-
-    fetch(url)
-      .then(res => res.json())
-      .then((data) => setQuestion(data.results[0]))
-  }
-
+  }, [getQuestion, selectedCategory]);
 
   return (
     <div className="app">
@@ -29,13 +29,16 @@ export default function App() {
 
       {/* question header ----------------------- */}
       <div className="question-header">
-        <CategorySelector />
+        <CategorySelector
+          category={selectedCategory}
+          chooseCategory={setSelectedCategory}
+        />
         <Scoreboard />
       </div>
 
       {/* the question itself ----------------------- */}
       <div className="question-main">
-        {question && <Question question={question} /> }
+        {question && <Question question={question} />}
       </div>
 
       {/* question footer ----------------------- */}
