@@ -24,7 +24,6 @@ export default function App() {
   function handleQuestionAnswered(answer) {
     const isAnswerCorrect = answer === question.correct_answer;
     setIsCorrect(isAnswerCorrect);
-    console.log(isCorrect);
   }
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export default function App() {
         <ResultModal
           isCorrect={isCorrect}
           answer={question.correct_answer}
-          nextQuestion={getQuestion}
+          getNextQuestion={getQuestion}
         />
       )}
 
@@ -48,7 +47,7 @@ export default function App() {
           category={selectedCategory}
           chooseCategory={setSelectedCategory}
         />
-        <Scoreboard />
+        <Scoreboard isCorrect={isCorrect} />
       </div>
 
       {/* the question itself ----------------------- */}

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ResultModal({ isCorrect, answer, getQuestion }) {
+export default function ResultModal({ isCorrect, answer, getNextQuestion }) {
   return (
     <div className={`result-modal ${isCorrect ? "is-correct" : "is-wrong"}`}>
       <div className="overlay" />
@@ -29,7 +29,7 @@ export default function ResultModal({ isCorrect, answer, getQuestion }) {
           </div>
         )}
 
-        <button onClick={getQuestion}>Go to next question 👉</button>
+        <button onClick={getNextQuestion}>Go to next question 👉</button>
       </div>
     </div>
   );
