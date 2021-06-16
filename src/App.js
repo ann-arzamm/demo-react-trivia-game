@@ -8,8 +8,11 @@ import "./App.css";
 export default function App() {
   const [question, setQuestion] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("any");
+  const [isCorrect, setIsCorrect] = useState(null);
 
   const getQuestion = useCallback(() => {
+    setIsCorrect(null);
+
     let url = "https://opentdb.com/api.php?amount=1";
     if (selectedCategory !== "any") url += `&category=${selectedCategory}`;
 
@@ -18,6 +21,12 @@ export default function App() {
       .then((data) => setQuestion(data.results[0]));
   }, [selectedCategory]);
 
+  function handleQuestionAnswered(answer) {
+    const isAnswerCorrect = answer === question.correct_answer;
+    setIsCorrect(isAnswerCorrect);
+    console.log(isCorrect);
+  }
+
   useEffect(() => {
     getQuestion();
   }, [getQuestion, selectedCategory]);
@@ -25,7 +34,13 @@ export default function App() {
   return (
     <div className="app">
       {/* show the result modal ----------------------- */}
-      {/* <ResultModal /> */}
+      {isCorrect !== null && (
+        <ResultModal
+          isCorrect={isCorrect}
+          answer={question.correct_answer}
+          nextQuestion={getQuestion}
+        />
+      )}
 
       {/* question header ----------------------- */}
       <div className="question-header">
@@ -38,12 +53,17 @@ export default function App() {
 
       {/* the question itself ----------------------- */}
       <div className="question-main">
-        {question && <Question question={question} />}
+        {question && (
+          <Question
+            question={question}
+            answerQuestion={handleQuestionAnswered}
+          />
+        )}
       </div>
 
       {/* question footer ----------------------- */}
       <div className="question-footer">
-        <button>Go to next question 👉</button>
+        <button onClick={getQuestion}>Go to next question 👉</button>
       </div>
     </div>
   );
