@@ -7,14 +7,20 @@ import useTrivia from "./useTrivia";
 import "./App.css";
 
 export default function App() {
+  // custom hook / API
+  // → question fetching
+  // → category change handling
   const { question, getQuestion, category, setCategory } = useTrivia();
+  // correct answer state
   const [isCorrect, setIsCorrect] = useState(null);
 
+  // define if an answer is correct or not
   function handleQuestionAnswered(answer) {
     const isAnswerCorrect = answer === question.correct_answer;
     setIsCorrect(isAnswerCorrect);
   }
 
+  // reset the modal and fetch the next question
   function handleNextQuestion() {
     setIsCorrect(null);
     getQuestion();
@@ -22,7 +28,7 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* show the result modal ----------------------- */}
+      {/* the result modal ----------------------- */}
       {isCorrect !== null && (
         <ResultModal
           isCorrect={isCorrect}

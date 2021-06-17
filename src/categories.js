@@ -1,3 +1,4 @@
+// a predefined list of categories
 const categories = [
   {
     id: "any",
